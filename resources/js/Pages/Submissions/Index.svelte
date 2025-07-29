@@ -27,6 +27,9 @@
     let recaptchaResponse = '';
     let recaptchaWidget = null;
 
+    // Success modal state
+    let showSuccessModal = false;
+
     // Get current locale from page props
     $: currentLocale = $page.props.locale || 'en';
 
@@ -46,9 +49,12 @@
             phonePlaceholder: 'Enter phone number',
             grade: 'Grade Level',
             gradePlaceholder: 'Select a grade',
-            submit: 'Submit Application',
-            submitting: 'Submitting Application...',
-            success: 'Application submitted successfully'
+                         submit: 'Submit Application',
+             submitting: 'Submitting Application...',
+             success: 'Application submitted successfully',
+             thankYou: 'Thank You!',
+             successMessage: 'Your application has been submitted successfully. We will contact you soon.',
+             close: 'Close'
         },
         ar: {
             title: 'مدارس سعود العالمية - طلب تسجيل الطالب',
@@ -64,9 +70,12 @@
             phonePlaceholder: 'أدخل رقم الهاتف',
             grade: 'المستوى الدراسي',
             gradePlaceholder: 'اختر المستوى الدراسي',
-            submit: 'إرسال الطلب',
-            submitting: 'جاري إرسال الطلب...',
-            success: 'تم إرسال الطلب بنجاح'
+                         submit: 'إرسال الطلب',
+             submitting: 'جاري إرسال الطلب...',
+             success: 'تم إرسال الطلب بنجاح',
+             thankYou: 'شكراً لك!',
+             successMessage: 'تم إرسال طلبك بنجاح. سنتواصل معك قريباً.',
+             close: 'إغلاق'
         }
     };
 
@@ -133,6 +142,28 @@
         }
     }
 
+    // Open success modal
+    function openSuccessModal() {
+        showSuccessModal = true;
+        
+        // Show modal
+        const toggleButton = document.querySelector('[data-kt-modal-toggle="#success_modal"]');
+        if (toggleButton) {
+            toggleButton.click();
+        }
+    }
+
+    // Close success modal
+    function closeSuccessModal() {
+        // Simulate button click to use KT framework logic
+        const dismissButton = document.querySelector('[data-kt-modal-dismiss="#success_modal"]');
+        if (dismissButton) {
+            dismissButton.click();
+        }
+        
+        showSuccessModal = false;
+    }
+
     // Handle form submission
     function handleSubmit() {
         loading = true;
@@ -172,29 +203,33 @@
                 loading = false;
             },
             onSuccess: () => {
-                // Reset form on success
-                form = {
-                    firstname: '',
-                    lastname: '',
-                    email: '',
-                    phone: '',
-                    grade: ''
-                };
-                errors = {};
-                loading = false;
-                
-                // Reset the phone input
-                if (itiInstance) {
-                    itiInstance.setCountry('sa');
-                    itiInstance.setNumber('');
-                }
+                 // Reset form on success
+                 form = {
+                     firstname: '',
+                     lastname: '',
+                     email: '',
+                     phone: '',
+                     grade: ''
+                 };
+                 errors = {};
+                 loading = false;
+                 
+                 // Reset the phone input
+                 if (itiInstance) {
+                     itiInstance.setCountry('sa');
+                     itiInstance.setNumber('');
+                 }
 
-                // Reset reCAPTCHA
-                if ($page.props.captcha?.enabled && window.grecaptcha && recaptchaWidget !== null) {
-                    window.grecaptcha.reset(recaptchaWidget);
-                    recaptchaResponse = '';
-                }
-            },
+                 // Reset reCAPTCHA
+                 if ($page.props.captcha?.enabled && window.grecaptcha && recaptchaWidget !== null) {
+                     window.grecaptcha.reset(recaptchaWidget);
+                     recaptchaResponse = '';
+                 }
+
+                 console.log('success');
+                 // Show success modal
+                 openSuccessModal();
+             },
             onFinish: () => {
                 loading = false;
             }
@@ -365,14 +400,7 @@
     <!-- Left Column - Application Form -->
     <div class="flex justify-center items-center p-4 lg:p-10 order-2 lg:order-1">
         <div class="kt-card max-w-[370px] w-full">
-            <form on:submit|preventDefault={handleSubmit} class="kt-card-content flex flex-col gap-5">
-                {#if $page.props.flash?.success}
-                    <div class="kt-alert kt-alert-success-outline" style="background-color: #e6f7ff; border-color: #91d5ff;">
-                        <div class="kt-alert-content">
-                            <span class="kt-alert-text">{t('success')}</span>
-                        </div>
-                    </div>
-                {/if}
+                         <form on:submit|preventDefault={handleSubmit} class="kt-card-content flex flex-col gap-5 p-10">
 
                 <!-- First Name Input -->
                 <div class="flex flex-col gap-1">
@@ -511,6 +539,71 @@
                 </h3>
                 <div class="text-base font-medium text-white">
                     {t('description')}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden button to trigger modal -->
+    <button style="display:none" data-kt-modal-toggle="#success_modal"></button>
+
+    <!-- Success Modal -->
+    <div class="kt-modal kt-modal-center" data-kt-modal="true" id="success_modal">
+        <div class="kt-modal-content max-w-[500px]">
+            <div class="kt-modal-header">
+                <h3 class="kt-modal-title">{t('thankYou')}</h3>
+                <button
+                    type="button"
+                    class="kt-modal-close"
+                    aria-label="Close modal"
+                    data-kt-modal-dismiss="#success_modal"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-x"
+                        aria-hidden="true"
+                    >
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kt-modal-body">
+                <div class="flex flex-col items-center text-center space-y-4">
+                    <!-- Success Icon -->
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    
+                    <!-- Success Message -->
+                    <div class="space-y-2">
+                        <h4 class="text-lg font-semibold text-mono">{t('thankYou')}</h4>
+                        <p class="text-sm text-muted-foreground">
+                            {t('successMessage')}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="kt-modal-footer">
+                <div></div>
+                <div class="flex gap-4">
+                    <button
+                        class="kt-btn kt-btn-primary"
+                        data-kt-modal-dismiss="#success_modal"
+                        on:click={closeSuccessModal}
+                    >
+                        {t('close')}
+                    </button>
                 </div>
             </div>
         </div>
