@@ -336,19 +336,9 @@
              left: 20px;
          }
 
-         /* reCAPTCHA styling */
-         #recaptcha-container {
-             transform-origin: center;
-         }
-
-         /* Responsive reCAPTCHA */
-         @media (max-width: 480px) {
-             #recaptcha-container {
-                 transform: scale(0.85);
-                 transform-origin: center;
-             }
-         }
-
+        .recaptcha-container > div {
+            width: 100% !important;
+        }
      </style>
 </svelte:head>
 
@@ -373,9 +363,9 @@
     </div>
 
     <!-- Left Column - Application Form -->
-    <div class="flex justify-center items-center p-8 lg:p-10 order-2 lg:order-1">
+    <div class="flex justify-center items-center p-4 lg:p-10 order-2 lg:order-1">
         <div class="kt-card max-w-[370px] w-full">
-            <form on:submit|preventDefault={handleSubmit} class="kt-card-content flex flex-col gap-5 p-10">
+            <form on:submit|preventDefault={handleSubmit} class="kt-card-content flex flex-col gap-5">
                 {#if $page.props.flash?.success}
                     <div class="kt-alert kt-alert-success-outline" style="background-color: #e6f7ff; border-color: #91d5ff;">
                         <div class="kt-alert-content">

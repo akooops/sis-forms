@@ -161,19 +161,17 @@ return [
             'too_short' => 'The phone number is too short.',
             'too_long' => 'The phone number is too long.',
         ],
-        'custom' => [
-            'recaptcha' => [
-                'required' => 'Please complete the reCAPTCHA verification.',
-                'failed' => 'reCAPTCHA verification failed. Please try again.',
-                'not_configured' => 'reCAPTCHA is not properly configured.',
-                'connection_failed' => 'Unable to verify reCAPTCHA. Please try again.',
-            ],
-            'g-recaptcha-response' => [
-                'required' => 'Please complete the reCAPTCHA verification.',
-                'failed' => 'reCAPTCHA verification failed. Please try again.',
-                'not_configured' => 'reCAPTCHA is not properly configured.',
-                'connection_failed' => 'Unable to verify reCAPTCHA. Please try again.',
-            ],
+        'recaptcha' => [
+            'required' => 'Please complete the reCAPTCHA verification.',
+            'failed' => 'reCAPTCHA verification failed. Please try again.',
+            'not_configured' => 'reCAPTCHA is not properly configured.',
+            'connection_failed' => 'Unable to verify reCAPTCHA. Please try again.',
+        ],
+        'g-recaptcha-response' => [
+            'required' => 'Please complete the reCAPTCHA verification.',
+            'failed' => 'reCAPTCHA verification failed. Please try again.',
+            'not_configured' => 'reCAPTCHA is not properly configured.',
+            'connection_failed' => 'Unable to verify reCAPTCHA. Please try again.',
         ],
     ],
 
